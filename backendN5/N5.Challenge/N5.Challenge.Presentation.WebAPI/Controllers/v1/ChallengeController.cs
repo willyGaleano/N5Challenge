@@ -10,9 +10,9 @@ namespace N5.Challenge.Presentation.WebAPI.Controllers.v1
     public class ChallengeController : BaseApiController
     {        
         [HttpPatch("RequestPermission/{permissionId}")]
-        public async Task<IActionResult> RequestPermission(int permissionId, [FromBody] RequestPermissionCommand command)
+        public async Task<IActionResult> RequestPermission(int permissionId)
         {
-            command.PermisoId = permissionId;
+            RequestPermissionCommand command = new() { PermisoId = permissionId };
             return Ok(await Mediator.Send(command));
         }
 

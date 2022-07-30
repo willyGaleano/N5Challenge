@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Elasticsearch.Net;
+using MediatR;
 using N5.Challenge.Core.Application.DTOs.Permissions;
 using N5.Challenge.Core.Application.Interfaces.Repository;
 using N5.Challenge.Core.Application.Wrappers;
@@ -55,8 +56,8 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.ModifyPermi
                     TipoPermiso = permissionType.Descripcion,
                     FechaPermiso = request.FechaPermiso
                 };
-                var respES = await _elasticClient.UpdateAsync<PermissionsDTO>(request.PermisoId, d => d.Doc(obj), cancellationToken);
-
+                var respES = await _elasticClient.UpdateAsync<PermissionsDTO>(request.PermisoId, 
+                                                            d => d.Doc(obj).Refresh(Refresh.True), cancellationToken);
                 if (!respES.IsValid)
                 {
                     return new Response<PermissionsDTO>(null, false, $"No se puso actualizar en ES el permiso con ID : {request.PermisoId}");
