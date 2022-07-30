@@ -4,7 +4,11 @@ Prueba técnica - N5
 
 http://localhost/swagger/index.html
 
-[![API.png](https://i.postimg.cc/TwK9Xqvm/API.png)](https://postimg.cc/YGwg6F9q)
+[![api.png](https://i.postimg.cc/1zQ0CxBv/api.png)](https://postimg.cc/cvF8CbV3)
+
+[![table.png](https://i.postimg.cc/3J0g3rbL/table.png)](https://postimg.cc/1fPgHSS6)
+
+[![editar.png](https://i.postimg.cc/qRBsr89n/editar.png)](https://postimg.cc/qtYhXCBM)
 
 ## Endpoints 🚀
 
