@@ -5,8 +5,11 @@ using System.Collections.Generic;
 
 namespace N5.Challenge.Core.Application.Features.Permission.Queries.GetPermissions
 {
-    public class GetPermissionsQuery : IRequest<Response<List<PermissionsDTO>>>
+    public class GetPermissionsQuery : IRequest<PagedResponse<List<PermissionsDTO>>>
     {
         public string NombreEmpleado { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+
     }
 }

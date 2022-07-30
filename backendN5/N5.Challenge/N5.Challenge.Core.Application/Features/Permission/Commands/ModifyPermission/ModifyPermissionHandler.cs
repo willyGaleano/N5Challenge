@@ -33,12 +33,12 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.ModifyPermi
                 var permission = await _repositoryPermissions.GetByIdAsync(request.PermisoId, cancellationToken);
                 if (permission == null)
                 {
-                    return new Response<PermissionsDTO>(null, false, $"No existe ningún permiso con ID : {request.PermisoId}");
+                    return new Response<PermissionsDTO>($"No existe ningún permiso con ID : {request.PermisoId}");
                 }
                 var permissionType = await _repositoryPermissionTypes.GetByIdAsync(request.TipoPermisoId, cancellationToken);
                 if (permissionType == null)
                 {
-                    return new Response<PermissionsDTO>(null, false, $"No existe el tipo de permiso con ID : {request.TipoPermisoId}");
+                    return new Response<PermissionsDTO>($"No existe el tipo de permiso con ID : {request.TipoPermisoId}");
                 }
                 permission.NombreEmpleado = request.NombreEmpleado;
                 permission.ApellidoEmpleado = request.ApellidoEmpleado;
@@ -60,7 +60,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.ModifyPermi
                                                             d => d.Doc(obj).Refresh(Refresh.True), cancellationToken);
                 if (!respES.IsValid)
                 {
-                    return new Response<PermissionsDTO>(null, false, $"No se puso actualizar en ES el permiso con ID : {request.PermisoId}");
+                    return new Response<PermissionsDTO>($"No se puso actualizar en ES el permiso con ID : {request.PermisoId}");
                 }
 
                 return new Response<PermissionsDTO>(obj, "Se actualizó correctamente el permiso");
@@ -68,7 +68,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.ModifyPermi
             catch (Exception ex)
             {
                 Log.Error($"ModifyPermissionHandler :: ex : {ex.Message}");
-                return new Response<PermissionsDTO>(null, false, ex.Message); ;
+                return new Response<PermissionsDTO>(ex.Message);
             }
         }
     }

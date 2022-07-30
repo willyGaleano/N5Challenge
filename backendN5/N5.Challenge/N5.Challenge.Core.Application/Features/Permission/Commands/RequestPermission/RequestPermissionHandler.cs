@@ -33,14 +33,14 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.RequestPerm
                 var permission = await _repositoryPermissions.GetByIdAsync(request.PermisoId, cancellationToken);
                 if (permission == null)
                 {
-                    return new Response<int>(-1, false, $"No existe ningún permiso con ID : {request.PermisoId}");
+                    return new Response<int>($"No existe ningún permiso con ID : {request.PermisoId}");
                 }
                 string description = PermissionTypesEnum.USER.ToString();
                 var permissionType = await _repositoryPermissionTypes.GetBySpecAsync(new GetByNameSpecification(description), cancellationToken);
 
                 if(permissionType == null)
                 {
-                    return new Response<int>(-1, false, $"No existe el tipo de permiso : {description}");
+                    return new Response<int>($"No existe el tipo de permiso : {description}");
                 }
                 permission.TipoPermiso = permissionType.Id;
 
@@ -56,7 +56,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.RequestPerm
 
                 if (!respES.IsValid)
                 {
-                    return new Response<int>(-1, false, $"No se puso actualizar en ES el permiso con ID : {request.PermisoId}");
+                    return new Response<int>($"No se puso actualizar en ES el permiso con ID : {request.PermisoId}");
                 }
 
                 return new Response<int>(request.PermisoId, "Se actualizó correctamente el tipo de permiso");
@@ -64,7 +64,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.RequestPerm
             catch(Exception ex)
             {
                 Log.Error($"RequestPermissionHandler :: ex : {ex.Message}");
-                return new Response<int>(-1, false, ex.Message);
+                return new Response<int>(ex.Message);
             }
         }
     }

@@ -5,6 +5,7 @@ using N5.Challenge.Core.Application.Interfaces.Repository;
 using N5.Challenge.Core.Application.Wrappers;
 using N5.Challenge.Core.Domain.Entities;
 using Nest;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
                 int totalPermissions = await _repositoryPermissions.CountAsync(cancellationToken);
                 if(totalPermissions >= request.Cant)
                 {
-                    return new Response<List<int>>(null, false, $"Ya existe data mayor o igual a la cantidad solicitada : {request.Cant}");
+                    return new Response<List<int>>($"Ya existe data mayor o igual a la cantidad solicitada : {request.Cant}");
                 }
 
                 PermissionTypes perType = await GetOrCreatePermissionType(cancellationToken);
@@ -48,7 +49,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
             catch (Exception ex)
             {
                 Log.Error($"CreateDataFakeHandler Handle :: ex : {ex.Message}");
-                return new Response<List<int>>(null, false , ex.Message);
+                return new Response<List<int>>(ex.Message);
             }
         }
 
@@ -67,10 +68,12 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
                     TipoPermiso = perType.Descripcion,
                     FechaPermiso = resp.FechaPermiso
                 };
-                var respes = await _elasticClient.IndexAsync(obj, i => i
-                    .Id(resp.Id), cancellationToken
-                );
 
+                var respes = await _elasticClient.IndexAsync(obj, i => i.Id(resp.Id), cancellationToken);
+                if (!respes.IsValid)
+                {
+                    Log.Error($"No se pudo persistir en ELS : {JsonConvert.SerializeObject(obj)}");
+                }
                 listIdsTemp.Add(resp.Id);
             }
 
@@ -80,7 +83,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
         private async Task<PermissionTypes> GetOrCreatePermissionType(CancellationToken cancellationToken)
         {
             var permissionTypeTemp = await _repositoryPermissionTypes.GetByIdAsync<int>(((int)PermissionTypesEnum.DEFAULT), cancellationToken);
-            if (permissionTypeTemp == null)
+            if (permissionTypeTemp == null && await _repositoryPermissionTypes.CountAsync(cancellationToken) > 0)
             {
                 var perDefault = new PermissionTypes
                 {

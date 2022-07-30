@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace N5.Challenge.Core.Application.Features.Permission.Queries.GetPermissions
 {
-    public class GetPermissionsHandler : IRequestHandler<GetPermissionsQuery, Response<List<PermissionsDTO>>>
+    public class GetPermissionsHandler : IRequestHandler<GetPermissionsQuery, PagedResponse<List<PermissionsDTO>>>
     {
         private readonly IElasticClient _elasticClient;
         public GetPermissionsHandler(IElasticClient elasticClient)
@@ -19,7 +19,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Queries.GetPermissio
             _elasticClient = elasticClient;
         }
 
-        public async Task<Response<List<PermissionsDTO>>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<List<PermissionsDTO>>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
         {
             try
             {
@@ -27,15 +27,24 @@ namespace N5.Challenge.Core.Application.Features.Permission.Queries.GetPermissio
                                s => s.Query(
                                    q => q.QueryString(
                                        d => d.Query('*' + request.NombreEmpleado + '*')
-                                    )).Size(5000));
+                                    ))                                    
+                                    .From((request.PageNumber - 1) * request.PageSize)
+                                    .Size(request.PageSize).Sort(x => x.Ascending(a => a.PermisoId)), cancellationToken);
 
-                var resp = new Response<List<PermissionsDTO>>(resultES.Documents.OrderBy(x => x.PermisoId).ToList());
+                if (!resultES.IsValid)
+                {
+                    Log.Error($"SearchAsync Elastic : {resultES.DebugInformation}");
+                    return new PagedResponse<List<PermissionsDTO>>(resultES.DebugInformation);
+                }
+
+                var documents = resultES.Documents.ToList();
+                var resp = new PagedResponse<List<PermissionsDTO>>(documents, request.PageNumber, request.PageSize, documents.Count, "OK");
                 return resp;
             }
             catch(Exception ex)
             {
                 Log.Error($"GetPermissionsHandler - Handle :: ex: {ex.Message}");
-                return new Response<List<PermissionsDTO>>(null, ex.Message);
+                return new PagedResponse<List<PermissionsDTO>>(ex.Message);
             }
         }
     }
