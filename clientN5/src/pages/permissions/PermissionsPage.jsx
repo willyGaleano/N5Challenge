@@ -1,80 +1,140 @@
 import { message, Modal, Table } from "antd";
+import { useForm } from "antd/lib/form/Form";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { listAllPermissionTypes } from "../../redux/actions/permissionTypesAction";
 import { permissionsAPI } from "../../services/api/permissionServiceAPI";
 import { ColumnsPermission } from "./components/ColumnsPermission";
 import { EditPermissionForm } from "./components/EditPermissionForm";
 
 const initialRequest = {
   nombreEmpleado: "",
+  pageNumber: 1,
+  pageSize: 10,
 };
 
 export const PermissionsPage = () => {
-  const dispatch = useDispatch();
   const [request, setRequest] = useState(initialRequest);
-  const [permissions, setPermissions] = useState([]);
+  const dispatch = useDispatch();
+  const [form] = useForm();
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [permissions, setPermissions] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+    total: 1,
+    succeeded: false,
+    message: "",
+    errors: null,
+    data: []
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
-  
-   useEffect(() => {
-    (async () => {
-      try {
-        console.log("UseEffct");
-        setLoadingTable(true);
-        const resp = await permissionsAPI.getAllPermissions(request);
-        console.log(resp.data.data);
-        setPermissions(resp.data.data);        
-        setLoadingTable(false);
-        
-      } catch (error) {
-        console.log(error.message);
-        setLoadingTable(false);
+
+  useEffect(() => {
+    dispatch(listAllPermissionTypes());
+  }, [])  
+
+  const openModalEdit = (item) => {    
+    form.setFields([
+      {
+        name: "permisoId",
+        value: item.permisoId
+      },
+      {
+        name: "nombreEmpleado",
+        value: item.nombreEmpleado,
+      },
+      {
+        name: "apellidoEmpleado",
+        value: item.apellidoEmpleado
+      },
+      {
+        name: "tipoPermisoId",
+        value: item.tipoPermisoId
+      },     
+      {
+        name: "fechaPermiso",
+        value: moment(item.fechaPermiso)
       }
-    })();
-  }, [request]);
-
-
-  const openModalEdit = (item) => {
-    setModalVisible(true);
-    console.log(item);
+    ]);
+    setModalVisible(true);    
   }
-
+  const handleModalCancel = () => {
+    form.resetFields();
+    setModalVisible(false);
+  }
   const requestPermission = async (item) => {        
     try{
+      setLoadingTable(true);
       const resp = await permissionsAPI.changedPermission({permisoId : item.permisoId});      
-      if(resp.data.succeeded) {
+      if(resp.succeeded) {
         setRequest((prevState) => ({
           ...prevState,
           nombreEmpleado: "",
         }));        
-        message.success(resp.data.message);
-      }      
+        message.success(resp.message);
+      }
+      setTimeout(() => {
+        setLoadingTable(false);  
+      }, 1000);      
     }catch(ex){
-      message.error(ex.message);      
+      setLoadingTable(false);
+      message.error(ex.message);
     }
-    
   }
-
   const columns = ColumnsPermission(requestPermission, openModalEdit);
 
-  const handleModalCancel = () => {
-     setRequest((prevState) => ({
-      ...prevState,
-      nombreEmpleado: "",
-    }));
-    setModalVisible(false);
+  useEffect(() => {
+    (async () => {
+      try {                
+        const resp = await permissionsAPI.getAllPermissions(request);
+        if(!resp.succeeded)
+          message.error(resp.message);
+
+        setPermissions(resp);              
+      } catch (error) {
+        message.error(error.message);        
+      }
+    })();
+  }, [request]);
+
+  const handleEditPermission = async (value) => {
+    const body = {
+      ...value,
+      fechaPermiso: value.fechaPermiso.format("YYYY-MM-DDTHH:mm:ss.SSSS"),
+    };
+    try {      
+      setLoadingButton(true);
+      const resp = await permissionsAPI.updatePermission(body.permisoId, body);
+      if (resp.succeeded) {
+        handleModalCancel();
+        setLoadingTable(true);
+        setLoadingButton(false);
+        message.success(resp.message);
+        setRequest((prevState) => ({ ...prevState }));
+        setTimeout(() => {
+          setLoadingTable(false);
+        }, 1000);        
+      } else {
+        setLoadingButton(false);        
+        notification.error({
+          message: "Error! :c",
+          description: resp.message,
+        });
+      }
+    } catch (error) {
+      setLoadingButton(false);
+      setLoadingTable(false);
+      message.error(error.message);
+    }    
   }
-  const handleEditPermission = (value) => {
-    console.log(value);
-  }
-  const onPaginatedChange = (page) => {
+  const onPaginatedChange = (page) => {    
     setRequest((prevState) => ({
       ...prevState,
-      nombreEmpleado: "",
+      pageNumber: page,
     }));
   };
-
- 
 
   return (<>  
     <Table 
@@ -82,7 +142,13 @@ export const PermissionsPage = () => {
       rowKey="permisoId" 
       loading={loadingTable}  
       scroll={{ x: 650 }} 
-      dataSource={permissions}       
+      dataSource={permissions.data}
+      pagination={{
+        total: 15,
+        pageSize: permissions?.pageSize,
+        current: permissions?.pageNumber,
+        onChange: onPaginatedChange,
+      }}
       />
       
     <Modal
@@ -91,7 +157,11 @@ export const PermissionsPage = () => {
         onCancel={handleModalCancel}
         footer={null}
       >
-        <EditPermissionForm/>
+        <EditPermissionForm
+          handleOnSubmit={handleEditPermission}
+          loadingButton={loadingButton}
+          form={form}
+        />
       </Modal>
   </>)
 };

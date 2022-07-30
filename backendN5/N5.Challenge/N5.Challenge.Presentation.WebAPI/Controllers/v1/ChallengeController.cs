@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataFake;
 using N5.Challenge.Core.Application.Features.Permission.Commands.ModifyPermission;
 using N5.Challenge.Core.Application.Features.Permission.Commands.RequestPermission;
 using N5.Challenge.Core.Application.Features.Permission.Queries.GetPermissions;
@@ -32,14 +31,5 @@ namespace N5.Challenge.Presentation.WebAPI.Controllers.v1
             query.PageSize = validFilter.PageSize;
             return Ok(await Mediator.Send(query));
         }
-
-        [HttpPost("CreateDataFake")]
-        public async Task<IActionResult> CreateDataFake([FromBody] CreateDataFakeCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
-       
-
     }
 }

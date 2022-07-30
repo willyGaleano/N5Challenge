@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { permissionReducer } from "./permissionReducer";
+import { permissionTypesReducer } from "./permissionTypesReducer";
 
 export const rootReducer = combineReducers({
-  permission: permissionReducer
+  permissionTypes: permissionTypesReducer
 });

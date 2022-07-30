@@ -1,3 +1,3 @@
 export const types = {  
-  listPermissions: "[permissions] Listar Permisos",
+  listPermissionTypes: "[permissionTypes] Listar Tipos de Permisos",
 };

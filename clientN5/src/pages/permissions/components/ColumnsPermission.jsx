@@ -19,24 +19,24 @@ const getColorForType = (type) => {
 }
 
 const columns = [
-    {
-      title: "Nombre",
+  {
+    title : "CHALLENGE N5",
+    children : [
+      {
+      title: "Nombre(s)",
+      align: "center",
       dataIndex: "nombreEmpleado",
       key: "nombreEmpleado"
     },
     {
-      title: "Apellido",
+      title: "Apellido(s)",
+      align: "center",
       dataIndex: "apellidoEmpleado",
       key: "apellidoEmpleado",
     },
     {
-      title: "Fecha permiso",
-      dataIndex: "fechaPermiso",
-      key: "fechaPermiso",
-      render: (item) => moment(item).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
       title: "Tipo permiso",
+      align: "center",
       key: "tipoPermiso",
       dataIndex: "tipoPermiso",
       render: (item) => (            
@@ -46,7 +46,15 @@ const columns = [
             )
     },
     {
-      title: "Opciones",      
+      title: "Fecha permiso",
+      align: "center",
+      dataIndex: "fechaPermiso",
+      key: "fechaPermiso",
+      render: (item) => moment(item).format("YYYY-MM-DD HH:mm:ss")
+    },
+    {
+      title: "Opciones",
+      align: "center",
       key: "action",
       render: (record) => (
         <Space size="middle">
@@ -56,6 +64,8 @@ const columns = [
         </Space>
       ),
     },
+    ]
+  }    
 ];  
   return columns;
 }

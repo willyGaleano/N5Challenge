@@ -6,7 +6,7 @@ import { PermissionsPage } from "../pages/permissions/PermissionsPage";
 const AppRouter = () => {
   return (    
       <Switch >
-        <Route path="/permission" component={PermissionsPage}/>
+        <Route path="/" component={PermissionsPage}/>
         <Route path="/404" component={NotFoundPage} />
         <Route path="*">
           <Redirect to="/404" />

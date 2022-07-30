@@ -11,16 +11,7 @@ const BaseLayout = ({children}) => (
         width: '100%',
       }}
     >
-      <div className="logo" />
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['1']}
-        items={new Array(1).fill(null).map((_, index) => ({
-          key: String(index + 1),
-          label: "CHALLENGE N5",
-        }))}
-      />
+      <div className="logo"/>      
     </Header>
     <Content
       className="site-layout"
@@ -28,16 +19,7 @@ const BaseLayout = ({children}) => (
         padding: '0 50px',
         marginTop: 64,
       }}
-    >
-      <Breadcrumb
-        style={{
-          margin: '16px 0',
-        }}
-      >
-        <Breadcrumb.Item>N5</Breadcrumb.Item>
-        <Breadcrumb.Item>Challenge</Breadcrumb.Item>
-        <Breadcrumb.Item>Permissions</Breadcrumb.Item>
-      </Breadcrumb>
+    >      
       <div
         className="site-layout-background"
         style={{

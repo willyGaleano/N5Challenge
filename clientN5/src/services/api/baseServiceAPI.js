@@ -1,11 +1,11 @@
 import axiosInstance from "../config";
 
-//const responseBody =  (response) => response?.data;
+const responseBody =  (response) => response?.data;
 
 export const requestAPI = {
-  get: async (url) => await axiosInstance.get(url),
-  post: (url, body) => axiosInstance.post(url, body),
-  put: (url, body) => axiosInstance.put(url, body),
-  patch: async (url, body) => await axiosInstance.patch(url, body),
-  delete: (url) => axiosInstance.delete(url),
+  get: (url) => axiosInstance.get(url).then(responseBody),
+  post: (url, body) => axiosInstance.post(url, body).then(responseBody),
+  put: (url, body) => axiosInstance.put(url, body).then(responseBody),
+  patch: (url, body) => axiosInstance.patch(url, body).then(responseBody),
+  delete: (url) => axiosInstance.delete(url).then(responseBody),
 };

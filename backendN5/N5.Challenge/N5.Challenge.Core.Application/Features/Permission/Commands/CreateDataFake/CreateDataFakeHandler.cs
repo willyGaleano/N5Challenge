@@ -83,7 +83,7 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
         private async Task<PermissionTypes> GetOrCreatePermissionType(CancellationToken cancellationToken)
         {
             var permissionTypeTemp = await _repositoryPermissionTypes.GetByIdAsync<int>(((int)PermissionTypesEnum.DEFAULT), cancellationToken);
-            if (permissionTypeTemp == null && await _repositoryPermissionTypes.CountAsync(cancellationToken) > 0)
+            if (permissionTypeTemp == null && await _repositoryPermissionTypes.CountAsync(cancellationToken) == 0)
             {
                 var perDefault = new PermissionTypes
                 {
@@ -115,8 +115,8 @@ namespace N5.Challenge.Core.Application.Features.Permission.Commands.CreateDataF
             {
                 var obj = new Permissions
                 {
-                    NombreEmpleado = $"Empleado_{(char)i}",
-                    ApellidoEmpleado = $"Apellido_{(char)i}",
+                    NombreEmpleado = $"Empleado_{i}",
+                    ApellidoEmpleado = $"Apellido_{i}",
                     TipoPermiso = perTypeId,
                     FechaPermiso = DateTime.UtcNow
                 };
