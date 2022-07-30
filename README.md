@@ -12,64 +12,31 @@ http://localhost/swagger/index.html
 
 ## Endpoints 🚀
 
-_Create Bet_
+_Request Permission_
 
-http://localhost/api/v1/Bet/CreateBetAsync
+http://localhost/api/v1/Challenge/RequestPermission/{permissionId}
 
-[![create-Bet.png](https://i.postimg.cc/15QpWZXD/create-Bet.png)](https://postimg.cc/MX9MTNyG)
+[![request-Permission.png](https://i.postimg.cc/KjwBtC4r/request-Permission.png)](https://postimg.cc/sGPMr6Yv)
 
-_Create Roulette_
+_Modify Permission_
 
-http://localhost/api/v1/Roulette/CreateRouletteAsync
+http://localhost/api/v1/Challenge/ModifyPermission/{permissionId}
 
-[![create-Roulette.png](https://i.postimg.cc/MKZVVmvS/create-Roulette.png)](https://postimg.cc/HjKrC5wZ)
+[![modify.png](https://i.postimg.cc/Fz70dhFH/modify.png)](https://postimg.cc/30Qkz5Ds)
 
-_Get All Roulette_
+[![modify2.png](https://i.postimg.cc/FFBytkGd/modify2.png)](https://postimg.cc/8sLJM52N)
 
-http://localhost/api/v1/Roulette/GetAllRouletteAsync
+_Get Permissions_
 
-[![Get-All-Roulette.png](https://i.postimg.cc/G2mfTywh/Get-All-Roulette.png)](https://postimg.cc/nsN26Mh6)
+http://localhost/api/v1/Challenge/GetPermissions
 
-_Open Roulette_
+[![get1.png](https://i.postimg.cc/R0L72Pb4/get1.png)](https://postimg.cc/xkqNzP24)
 
-http://localhost/api/v1/Roulette/OpenRouletteAsync
+[![get2.png](https://i.postimg.cc/G2Mkm4Cf/get2.png)](https://postimg.cc/9R74xFzP)
 
-[![Open-Roulette.png](https://i.postimg.cc/d37S4cVb/Open-Roulette.png)](https://postimg.cc/N2c4jVTD)
+## Autor ✒️
 
-_Close Roulette_
-
-http://localhost/api/v1/Roulette/CloseRouletteAsync
-
-[![Close-Roulette.png](https://i.postimg.cc/3wcqpwKX/Close-Roulette.png)](https://postimg.cc/gw34bmLj)
-
-### Instalación 🔧
-
-_Clone el proyecto, ábralo con Visual Studio y ejecútelo con la opción Docker Compose_
-
-[![ejecutar.png](https://i.postimg.cc/85VZLXFH/ejecutar.png)](https://postimg.cc/JyP3Lq5D)
-
-## Construido con 🛠️
-
-- [.NET Core 5](http://www.dropwizard.io/1.0.2/docs/)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Redis](https://redis.io/)
-- [Docker](https://www.docker.com/)
-- [Swagger](https://swagger.io/)
-- [AutoMapper](https://automapper.org/)
-- [FluentValidation](https://fluentvalidation.net/)
-- [MediatR](https://www.nuget.org/packages/MediatR/)
-- [StackExchange.Redis](https://www.nuget.org/packages/StackExchange.Redis/)
-- [Microsoft.AspNetCore.Mvc.Versioning](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Versioning/)
-
-## Autores ✒️
-
-- **Williams David Galeano Gomez** - _.Net Developer_ - [Williams Galeano](https://github.com/willyGaleano)
-
-## Mi experiencia desarrollando la prueba 🎁
-
-- Me encantó construir la API, reforcé varios conocimientos que tenía 🤓
-  y sobre todo acoplarme al clean code del equipo de Masiv fue muy cómodo en la
-  mayoría de puntos.
+- **Williams David Galeano Gomez** - _Dev_ - [Williams Galeano](https://github.com/willyGaleano)
 
 ---
 
